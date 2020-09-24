@@ -3,6 +3,7 @@ package cricket.seek;
 import cricket.seek.LockSeries.MCSLock;
 import cricket.seek.LockSeries.NonReentrantLockLab;
 import cricket.seek.LockSeries.Notice;
+import cricket.seek.LockSeries.ReadWriteLockLab;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -15,7 +16,7 @@ import java.util.concurrent.Executors;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({LockSeriesTest.MCSLockTest.class})
+@Suite.SuiteClasses({/*LockSeriesTest.NoticeTest.class*/})
 public class LockSeriesTest {
 
     private static final LockSeries ls = new LockSeries();
@@ -79,6 +80,40 @@ public class LockSeriesTest {
             });
             es1.shutdown();
             es2.shutdown();
+        }
+    }
+
+    public static class ReadWriteLockLabTest {
+
+        @Test
+        public void test() {
+            final ReadWriteLockLab lockLab = ls.new ReadWriteLockLab();
+            for (int i = 0; i < 5; i++) {
+                final int finalI = i;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            lockLab.put(finalI + "", finalI);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, finalI + "").start();
+            }
+            for (int i = 0; i < 5; i++) {
+                final int finalI = i;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            lockLab.get(finalI + "");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, finalI + "").start();
+            }
         }
     }
 }

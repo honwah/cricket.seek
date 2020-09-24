@@ -1,12 +1,18 @@
 package cricket.seek;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 关于锁的求解
  */
 public class LockSeries {
+
     @Override
     public String toString() {
         return "整理关于锁的求解";
@@ -114,7 +120,7 @@ public class LockSeries {
     class MCSLock {
 
         //队尾节点
-        private  volatile AtomicReference<MCSNode> tail;
+        private volatile AtomicReference<MCSNode> tail;
         //自己
         private volatile ThreadLocal<MCSNode> my;
 
@@ -170,4 +176,42 @@ public class LockSeries {
             private volatile MCSNode next = null;
         }
     }
+
+    /**
+     * 互斥锁
+     * 多个线程可同时读一个资源，但当有一个线程尝试写共享资源时，其它线程就无法去读或写了
+     * 读-读 共享
+     * 读-写，写-写 互斥
+     */
+    class ReadWriteLockLab {
+        private volatile Map<String, Object> map = new HashMap<>();
+        private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+
+        public void put(String key, Object value) throws InterruptedException {
+            rwLock.writeLock().lock();
+            try {
+                System.out.println(Thread.currentThread().getName() + "\t 正在写入：key = " + key);
+                TimeUnit.MICROSECONDS.sleep(300);
+                map.put(key, value);
+                System.out.println(Thread.currentThread().getName() + "\t 写入完成：key = " + key);
+            } finally {
+                rwLock.writeLock().unlock();
+            }
+        }
+
+        public void get(String key) throws InterruptedException {
+            rwLock.readLock().lock();
+            try {
+                System.out.println(Thread.currentThread().getName() + "\t 正在读取：key = " + key);
+                TimeUnit.MICROSECONDS.sleep(300);
+                Object tmp = map.get(key);
+                System.out.println(Thread.currentThread().getName() + "\t 读取完成：key = " + tmp);
+            } finally {
+                rwLock.readLock().unlock();
+            }
+        }
+    }
+
+
+
 }
