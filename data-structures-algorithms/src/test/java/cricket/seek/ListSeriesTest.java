@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ListSeriesTest.quickSortTest.class})
+@Suite.SuiteClasses({/*ListSeriesTest.quickSortTest.class*/})
 public class ListSeriesTest {
 
     private static final ListSeries ls = new ListSeries();
