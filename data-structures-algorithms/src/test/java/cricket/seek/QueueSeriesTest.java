@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({QueueSeriesTest.SynchronousQueueLabTest.class})
+@Suite.SuiteClasses({/*QueueSeriesTest.SynchronousQueueLabTest.class*/})
 public class QueueSeriesTest {
     private static final QueueSeries qs = new QueueSeries();
 
