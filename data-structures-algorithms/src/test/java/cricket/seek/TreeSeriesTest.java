@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TreeSeriesTest.TreeNodeTest.class})
+@Suite.SuiteClasses({TreeSeriesTest.AvlTreeTest.class})
 public class TreeSeriesTest {
 
     public static class TreeNodeTest {
@@ -43,8 +43,71 @@ public class TreeSeriesTest {
 
             System.out.println(node22.getLevel());
 
-            TreeNode<String> node =  root.findNode("node 21");
+            TreeNode<String> node = root.findNode("node 21");
             Assert.assertNotNull(node);
+        }
+    }
+
+    public static class BinarySearchTreeTest {
+        @Test
+        public void test() {
+            BinarySearchTree<Integer> bst = new BinarySearchTree<>();
+            bst.insert(80);
+            bst.insert(90);
+            bst.insert(70);
+            bst.insert(60);
+            bst.insert(40);
+            bst.insert(50);
+            bst.insert(75);
+            bst.insert(72);
+            bst.insert(78);
+            bst.traverse("\t");
+            bst.remove(70);
+            bst.traverse("\t");
+            BinarySearchTree<Integer>.BinaryNode<Integer> node = bst.findNode(78);
+            Assert.assertNotNull(node);
+            Assert.assertEquals(5, bst.height());
+            Assert.assertEquals(8, bst.size());
+        }
+    }
+
+    public static class AvlTreeTest {
+
+        @Test
+        public void test() throws InterruptedException {
+            AvlTree<Integer> avl = new AvlTree<>();
+            //Integer[] arr = {30, 20, 26, 45, 66, 40, 70, 90};
+            Integer[] arr = {3, 2, 1, 4, 5, 6, 7, 16, 15, 14, 13, 12, 11, 10, 8, 9};
+            System.out.printf("依次添加: ");
+            for (int i = 0; i < arr.length; i++) {
+                System.out.printf("%d ", arr[i]);
+                avl.insert(arr[i]);
+            }
+            System.out.printf("\n前序遍历: ");
+            avl.preOrder();
+            System.out.printf("\n中序遍历: ");
+            avl.inOrder();
+            System.out.printf("\n后序遍历: ");
+            avl.postOrder();
+            System.out.println("\n层次遍历: ");
+            avl.traverse("", true);
+            avl = new AvlTree<>();
+            arr = new Integer[]{30, 20, 26, 45, 66, 40, 70, 90};
+            System.out.printf("依次添加: ");
+            for (int i = 0; i < arr.length; i++) {
+                System.out.printf("%d ", arr[i]);
+                avl.insert(arr[i]);
+            }
+            System.out.printf("\n前序遍历: ");
+            avl.preOrder();
+            System.out.printf("\n中序遍历: ");
+            avl.inOrder();
+            System.out.printf("\n后序遍历: ");
+            avl.postOrder();
+            System.out.println("\n层次遍历: ");
+            avl.traverse("", true);
+            avl.remove(20);
+            avl.traverse("", true);
         }
     }
 }
