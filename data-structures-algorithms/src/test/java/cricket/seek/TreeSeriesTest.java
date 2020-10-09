@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TreeSeriesTest.AvlTreeTest.class})
+@Suite.SuiteClasses({TreeSeriesTest.TrieTreeTest.class})
 public class TreeSeriesTest {
 
     public static class TreeNodeTest {
@@ -108,6 +108,48 @@ public class TreeSeriesTest {
             avl.traverse("", true);
             avl.remove(20);
             avl.traverse("", true);
+        }
+    }
+
+
+    public static class TrieTreeTest {
+
+        @Test
+        public void test() {
+            TrieTree tt = new TrieTree();
+            tt.add("人工智能");
+            tt.add("物联网");
+            tt.add("大数据");
+            tt.add("区块链");
+            tt.add("flink");
+            tt.add("netty");
+            tt.add("mysql");
+            tt.add("redis");
+            tt.add("人工智能");
+            tt.add("物联网");
+            tt.add("大数据");
+            tt.add("区块链");
+            tt.add("flink");
+            tt.add("netty");
+            tt.add("mysql");
+            tt.add("redis");
+            tt.add("kmp");
+            tt.add("物联网时代");
+            tt.add("my");
+            tt.traverse("", null, true);
+            boolean isHave = tt.contains("flink");
+            Assert.assertEquals(true, isHave);
+            int count = tt.query("人工智能");
+            Assert.assertEquals(2, count);
+            boolean isSuccess = tt.remove("flink");
+            Assert.assertEquals(true, isSuccess);
+            tt.traverse("", null, true);
+            isSuccess = tt.remove("flink");
+            Assert.assertEquals(true, isSuccess);
+            tt.traverse("", null, true);
+            isSuccess = tt.remove("my");
+            Assert.assertEquals(true, isSuccess);
+            tt.traverse("", null, true);
         }
     }
 }

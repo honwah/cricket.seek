@@ -1,8 +1,8 @@
 package cricket.seek;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
 
 /**
  * 关于树的求解
@@ -438,7 +438,7 @@ class AvlTree<T extends Comparable<? super T>> {
                 tmp = null;
             }
         }
-        if (node!=null) {
+        if (node != null) {
             node.height = Math.max(height(node.left), height(node.right)) + 1;
         }
         return node;
@@ -586,3 +586,162 @@ class AvlTree<T extends Comparable<? super T>> {
         }
     }
 }
+
+//字典树
+class TrieTree {
+
+
+    private TrieNode root;
+
+    public TrieTree() {
+        //根节点
+        this.root = new TrieNode('\u0000');
+    }
+
+    public void traverse(String prefix, String previousString, boolean isTail) {
+        System.out.println(getString(root, prefix, previousString, isTail));
+    }
+
+    protected String getString(TrieNode node, String prefix, String previousString, boolean isTail) {
+        StringBuilder builder = new StringBuilder();
+        String string = null;
+        if (node.data != '\u0000') {
+            String temp = String.valueOf(node.data);
+            if (previousString != null)
+                string = previousString + temp;
+            else
+                string = temp;
+        }
+        builder.append(prefix + (isTail ? "└── " : "├── ") + ((node.isWord == true) ?
+                ("(" + node.data + ") " + string)
+                :
+                node.data) +("["+node.isWord+"]")+("["+node.freq+"]")+ "\n"
+        );
+        if (node.children != null) {
+            int size = node.children.size();
+            int idx = 0;
+            for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+                if (idx < size - 1) {
+                    builder.append(getString(entry.getValue(), prefix + (isTail ? "    " : "│   "), string, false));
+                } else {
+                    break;
+                }
+                idx++;
+            }
+            if (size >= 1) {
+                builder.append(getString((TrieNode) ((TreeMap) node.children).lastEntry().getValue(), prefix + (isTail ? "    " : "│   "), string, true));
+            }
+        }
+        return builder.toString();
+    }
+
+    //1.word在Trie中不存在，删除失败，返回false
+    //2.word词尾字符在Trie中没有children (1)若该词尾TrieNode词频<=1，则删除此节点，然后向根部查找并删除，遇到代表词尾的节点或节点的children数量>0时停止 （2）若该词尾TrieNode词频>1,则词频-1
+    //3.word词尾字符在Trie中有children （1）若该词尾TrieNode词频=1，则TrieNode的isWord设置为false，词频-1 （2）若该词尾TrieNode词频>1,则词频-1
+    public boolean remove(String word) {
+        if (!this.contains(word)) {
+            return false;
+        }
+        TrieNode node = get(word);
+        if (node.children.size() > 0) {//有children
+            if (node.freq ==1) {
+                node.isWord = false;
+            }
+            node.freq--;
+        } else {//没有children
+            if (node.freq <= 1) {
+                int idx = word.length() - 1;
+                //取previous
+                TrieNode previous = get(StringUtils.substring(word, 0, idx));
+                //删除此节点
+                previous.children.remove(node.data);
+                //向根部查找并删除，遇到代表词尾的节点或节点的children数量>0时停止
+                while (previous != null && previous.isWord == false && previous.children.size() == 0) {
+                    node = previous;
+                    idx--;
+                    previous = get(StringUtils.substring(word, 0, idx));
+                    if (previous != null
+                    ) {
+                        previous.children.remove(node.data);
+                    }
+                }
+            } else {
+                node.freq--;
+            }
+        }
+        return true;
+    }
+
+    //查找word
+    public TrieNode get(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            TrieNode child = cur.children.get(word.charAt(i));
+            if (child == null) {
+                return null;
+            }
+            cur = child;
+        }
+        return cur;
+    }
+
+    //查询word出现次数
+    public int query(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            TrieNode child = cur.children.get(word.charAt(i));
+            if (child == null) {
+                return 0;
+            }
+            cur = child;
+        }
+        return cur.freq;
+    }
+
+    //判断word是否存在
+    public boolean contains(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            TrieNode child = cur.children.get(word.charAt(i));
+            if (child == null) {
+                return false;
+            }
+            cur = child;
+        }
+        return cur.isWord;
+    }
+
+    //添加单词,存在则单词频次+1
+    public void add(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            //将单词拆为字符
+            char c = word.charAt(i);
+            TrieNode child = cur.children.get(c);
+            if (child == null) {
+                cur.children.put(c, new TrieNode(c));
+                cur = cur.children.get(c);
+            } else {
+                cur = child;
+            }
+        }
+        cur.freq++;
+        cur.isWord = true;
+    }
+
+    //节点
+    class TrieNode {
+        public char data;//字符
+        public int freq;//单词出现频次
+        public boolean isWord;//是否词尾
+        public Map<Character, TrieNode> children;//子节点
+
+        public TrieNode(char data) {
+            this.data = data;
+            this.freq = 0;
+            this.children = new TreeMap<>();
+            this.isWord = false;
+        }
+    }
+}
+
