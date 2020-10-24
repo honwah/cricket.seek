@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TreeSeriesTest.TrieTreeTest.class})
+@Suite.SuiteClasses({/*TreeSeriesTest.TrieTreeTest.class*/})
 public class TreeSeriesTest {
 
     public static class TreeNodeTest {
