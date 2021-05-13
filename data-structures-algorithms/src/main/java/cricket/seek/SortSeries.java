@@ -7,7 +7,7 @@ public class SortSeries {
     }
 
     //快速排序，左右指针
-    public class QuickSort {
+    class QuickSort {
         //arr 需要排序的数组
         public void sort(int[] arr, int left, int right) {
             // 递归终止条件

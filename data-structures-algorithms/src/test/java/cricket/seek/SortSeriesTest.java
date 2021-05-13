@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SortSeriesTest.QuickSortTest.class})
+@Suite.SuiteClasses({/*SortSeriesTest.QuickSortTest.class*/})
 public class SortSeriesTest {
 
     private static final SortSeries ss = new SortSeries();
