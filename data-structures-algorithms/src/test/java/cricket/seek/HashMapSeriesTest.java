@@ -11,7 +11,7 @@ import cricket.seek.HashMapSeries.*;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({HashMapSeriesTest.OpenAddressingHashTableTest.class})
+@Suite.SuiteClasses({/*HashMapSeriesTest.OpenAddressingHashTableTest.class*/})
 public class HashMapSeriesTest {
 
     private static final HashMapSeries hms = new HashMapSeries();
