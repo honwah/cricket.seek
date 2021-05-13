@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({GraphSeriesTest.AdjacencyMatrixGraphTest.class})
+@Suite.SuiteClasses({/*GraphSeriesTest.AdjacencyMatrixGraphTest.class*/})
 public class GraphSeriesTest {
 
     private static final GraphSeries gs = new GraphSeries();
