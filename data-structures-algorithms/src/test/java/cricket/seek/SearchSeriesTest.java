@@ -13,7 +13,7 @@ import java.util.Arrays;
  */
 //@Ignore("已验证测试")
 @RunWith(Suite.class)
-@Suite.SuiteClasses({SearchSeriesTest.SearchTest.class})
+@Suite.SuiteClasses({/*SearchSeriesTest.SearchTest.class*/})
 public class SearchSeriesTest {
     private static final SearchSeries ss = new SearchSeries();
 
